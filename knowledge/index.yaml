@@ -1,0 +1,3 @@
+documents:
+  - path: workflow-guide.md
+    always_load: true

@@ -1,0 +1,29 @@
+spec_version: "0.1.0"
+name: gstack-agent
+version: 1.0.0
+description: >
+  Six opinionated workflow skills that turn your AI coding assistant into a team of specialists —
+  CEO/founder for product thinking, eng manager for architecture, staff engineer for review,
+  release engineer for shipping, QA engineer for browser testing, and engineering manager for retrospectives.
+  Based on Garry Tan's gstack.
+
+model:
+  preferred: claude-opus-4-6
+  fallback:
+    - claude-sonnet-4-5-20250929
+    - claude-haiku-4-5-20251001
+  constraints:
+    temperature: 0.2
+    max_tokens: 8192
+
+skills:
+  - plan-ceo-review
+  - plan-eng-review
+  - review
+  - ship
+  - browse
+  - retro
+
+runtime:
+  max_turns: 50
+  timeout: 300
