@@ -5,7 +5,7 @@ Six opinionated workflow skills that turn your AI coding assistant into a team o
 ## Run
 
 ```bash
-npx @open-gitagent/gitagent run -r https://github.com/<username>/gstack-agent
+npx @open-gitagent/gitagent run -r https://github.com/shreyas-lyzr/gstack-agent
 ```
 
 ## What It Can Do
