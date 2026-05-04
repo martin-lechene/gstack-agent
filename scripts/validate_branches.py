@@ -72,9 +72,9 @@ def validate_branch(branch):
             issues.append("Missing AGENTS.md")
         if not file_exists("opencode.json"):
             issues.append("Missing opencode.json")
-    if branch in ["main", "claude"]:
+    if branch == "main":
         if not file_exists("install.sh") or not file_exists("install.bat"):
-            issues.append("Install helpers missing for Claude/main branch")
+            issues.append("Install helpers missing for main branch")
     if not file_exists("README.md"):
         issues.append("Missing README.md")
     else:
