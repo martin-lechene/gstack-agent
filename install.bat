@@ -319,12 +319,22 @@ echo Selected Claude default. No files were created.
 goto done
 
 :help
-echo Usage: install.bat [cursor|opencode|claude]
+echo Usage: install.bat [cursor|opencode|codex|antigravity|vscode|copilot|phpstorm|claude]
 echo.
 echo If no option is supplied, the script will detect the best target and prompt interactively.
 exit /b 0
 
 :done
+echo.
+echo Summary:
+echo   Cursor:      %cursor_exists%
+echo   OpenCode:    %opencode_exists%
+echo   Codex:       %codex_exists%
+echo   Antigravity: %antigravity_exists%
+echo   VS Code:     %vscode_exists%
+echo   Copilot:     %copilot_exists%
+echo   PhpStorm:    %phpstorm_exists%
+echo   Claude:      %claude_exists%
 echo.
 echo Completed without overwriting existing files.
 endlocal
