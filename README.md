@@ -44,6 +44,16 @@ gstack-agent/
     └── workflow-guide.md
 ```
 
+## Branch adaptation matrix
+
+| Branch | Target | Core artifacts | Use case |
+|---|---|---|---|
+| `claude` | Claude Code | `agent.yaml`, `SOUL.md`, `RULES.md`, `skills/` | Default Open-GitAgent/Claude workflow |
+| `cursor` | Cursor IDE | `.cursor/rules/*.mdc`, `skills/` | Cursor rule export adapted from the same agent source |
+| `opencode` | OpenCode | `AGENTS.md`, `opencode.json` | OpenCode agent configuration and instructions |
+
+> Use `git checkout <branch>` to pick the adaptation target, then follow the branch-specific README and artifacts for Cursor or OpenCode execution.
+
 ## Built with
 
 [gitagent](https://github.com/open-gitagent/gitagent) — a git-native, framework-agnostic open standard for AI agents.
