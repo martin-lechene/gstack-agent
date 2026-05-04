@@ -1,50 +1,54 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-root="$(pwd)"
-if [ ! -f "$root/agent.yaml" ]; then
-  echo "Error: agent.yaml not found. Run this script from the repository root."
-  exit 1
-fi
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-cursor_exists=false
-opencode_exists=false
-claude_exists=false
+usage() {
+  cat <<EOF
+Usage: bash install.sh [--target cursor|opencode|claude] [--help]
 
-if [ -d "$root/.cursor/rules" ] && ls "$root/.cursor/rules"/*.md >/dev/null 2>&1; then
-  cursor_exists=true
-fi
+Interactive installer for gstack-agent.
 
-if [ -f "$root/AGENTS.md" ] || [ -f "$root/opencode.json" ]; then
-  opencode_exists=true
-fi
+Options:
+  --target <cursor|opencode|claude>  Create only the selected support files.
+  --help                             Show this help message.
+EOF
+}
 
-if [ -d "$root/.claude/skills" ]; then
-  claude_exists=true
-fi
+detect_support() {
+  cursor_exists=false
+  opencode_exists=false
+  claude_exists=false
 
-echo "Detected existing agent support:"
-echo "  Cursor:   $([ "$cursor_exists" = true ] && echo yes || echo no)"
-echo "  OpenCode: $([ "$opencode_exists" = true ] && echo yes || echo no)"
-echo "  Claude:   $([ "$claude_exists" = true ] && echo yes || echo no)"
+  if [ -d "$root/.cursor/rules" ] && ls "$root/.cursor/rules"/*.md >/dev/null 2>&1; then
+    cursor_exists=true
+  fi
 
-recommended="Claude"
-if [ "$cursor_exists" = true ]; then
-  recommended="Cursor"
-elif [ "$opencode_exists" = true ]; then
-  recommended="OpenCode"
-fi
+  if [ -f "$root/AGENTS.md" ] || [ -f "$root/opencode.json" ]; then
+    opencode_exists=true
+  fi
 
-echo
-printf "Recommended target based on detection: %s\n" "$recommended"
-echo
+  if [ -d "$root/.claude/skills" ]; then
+    claude_exists=true
+  fi
+}
 
-echo "Choose installation target:"
-echo "  1) Cursor support (.cursor/rules/)"
-echo "  2) OpenCode support (AGENTS.md + opencode.json)"
-echo "  3) Claude default (use agent.yaml)"
-read -r -p "Select 1/2/3 [default $( [ "$recommended" = "Cursor" ] && echo 1 || { [ "$recommended" = "OpenCode" ] && echo 2 || echo 3; } )]: " choice
-choice="${choice:-$( [ "$recommended" = "Cursor" ] && echo 1 || { [ "$recommended" = "OpenCode" ] && echo 2 || echo 3; } )}"
+recommended_target() {
+  if [ "$cursor_exists" = true ]; then
+    echo cursor
+  elif [ "$opencode_exists" = true ]; then
+    echo opencode
+  else
+    echo claude
+  fi
+}
+
+prompt_choice() {
+  local default_choice=$1
+  read -r -p "Select 1/2/3 [default ${default_choice}]: " choice
+  choice="${choice:-${default_choice}}"
+  echo "$choice"
+}
 
 create_cursor() {
   mkdir -p "$root/.cursor/rules"
@@ -114,21 +118,79 @@ EOF
   fi
 }
 
-case "$choice" in
-  1)
-    echo "Selected Cursor support."
+if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+  usage
+  exit 0
+fi
+
+if [ ! -f "$root/agent.yaml" ]; then
+  echo "Error: agent.yaml not found. Run this script from the repository root."
+  exit 1
+fi
+
+detect_support
+
+echo "Detected existing adapter support:"
+echo "  Cursor:   $([ "$cursor_exists" = true ] && echo yes || echo no)"
+echo "  OpenCode: $([ "$opencode_exists" = true ] && echo yes || echo no)"
+echo "  Claude:   $([ "$claude_exists" = true ] && echo yes || echo no)"
+
+echo
+recommended="$(recommended_target)"
+echo "Recommended target: $recommended"
+echo
+
+if [ "${1:-}" = "--target" ]; then
+  if [ -z "${2:-}" ]; then
+    echo "Error: --target requires a value."
+    usage
+    exit 1
+  fi
+  case "$2" in
+    cursor|opencode|claude)
+      target="$2"
+      ;;
+    *)
+      echo "Error: invalid target '$2'. Use cursor, opencode, or claude."
+      usage
+      exit 1
+      ;;
+  esac
+else
+  echo "Choose installation target:"
+  echo "  1) Cursor support (.cursor/rules/)"
+  echo "  2) OpenCode support (AGENTS.md + opencode.json)"
+  echo "  3) Claude default (use agent.yaml)"
+  choice=$(prompt_choice "$([ "$recommended" = "cursor" ] && echo 1 || { [ "$recommended" = "opencode" ] && echo 2 || echo 3; })")
+  case "$choice" in
+    1)
+      target=cursor
+      ;;
+    2)
+      target=opencode
+      ;;
+    3)
+      target=claude
+      ;;
+    *)
+      echo "Invalid selection: $choice"
+      exit 1
+      ;;
+  esac
+fi
+
+echo "Selected target: $target"
+
+echo
+case "$target" in
+  cursor)
     create_cursor
     ;;
-  2)
-    echo "Selected OpenCode support."
+  opencode)
     create_opencode
     ;;
-  3)
+  claude)
     echo "Selected Claude default. No files were created."
-    ;;
-  *)
-    echo "Invalid selection: $choice"
-    exit 1
     ;;
 esac
 
@@ -140,4 +202,4 @@ Summary:
   Claude support:   $claude_exists
 EOF
 
-echo "Completed without overwriting existing files."
+echo "Installation helper completed without overwriting existing files."

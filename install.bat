@@ -1,6 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
+if "%~1"=="/?" goto help
+if "%~1"=="--help" goto help
+
 if not exist agent.yaml (
   echo Error: agent.yaml not found. Run this from the repository root.
   exit /b 1
@@ -39,6 +42,7 @@ if "%cursor_exists%"=="yes" (
 echo Recommended target based on detection: %recommended%
 
 echo.
+
 echo Choose installation target:
 echo   1) Cursor support (.cursor\rules\)
 echo   2) OpenCode support (AGENTS.md + opencode.json)
@@ -46,8 +50,14 @@ echo   3) Claude default (use agent.yaml)
 set "default=3"
 if "%recommended%"=="Cursor" set "default=1"
 if "%recommended%"=="OpenCode" set "default=2"
-set /p "choice=Select 1/2/3 [default %default%]: "
-if "%choice%"=="" set "choice=%default%"
+
+if "%~1"=="cursor" set "choice=1"
+if "%~1"=="opencode" set "choice=2"
+if "%~1"=="claude" set "choice=3"
+if not defined choice (
+  set /p "choice=Select 1/2/3 [default %default%]: "
+  if "%choice%"=="" set "choice=%default%"
+)
 
 if "%choice%"=="1" goto do_cursor
 if "%choice%"=="2" goto do_opencode
@@ -117,6 +127,12 @@ goto done
 :do_claude
 echo Selected Claude default. No files were created.
 goto done
+
+:help
+echo Usage: install.bat [cursor|opencode|claude]
+echo.
+echo If no option is supplied, the script will detect the best target and prompt interactively.
+exit /b 0
 
 :done
 echo.

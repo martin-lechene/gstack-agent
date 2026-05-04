@@ -51,8 +51,13 @@ gstack-agent/
 | `claude` | Claude Code | `agent.yaml`, `SOUL.md`, `RULES.md`, `skills/` | Default Open-GitAgent/Claude workflow |
 | `cursor` | Cursor IDE | `.cursor/rules/*.mdc`, `skills/` | Cursor rule export adapted from the same agent source |
 | `opencode` | OpenCode | `AGENTS.md`, `opencode.json` | OpenCode agent configuration and instructions |
+| `codex` | OpenAI Codex / Copilot | `agent.yaml`, `skills/`, runtime-specific helpers | Codex runtime adaptation branch |
+| `antigravity` | Antigravity | `agent.yaml`, `skills/`, runtime-specific helpers | Antigravity runtime adaptation branch |
+| `vscode` | VS Code AI | `.vscode/*`, `skills/`, runtime-specific helpers | VS Code AI runtime adaptation branch |
+| `copilot` | GitHub Copilot | `agent.yaml`, `skills/`, runtime-specific helpers | Copilot runtime adaptation branch |
+| `phpstorm` | PhpStorm / Junie | `.phpstorm/*`, `skills/`, runtime-specific helpers | PhpStorm Junie runtime adaptation branch |
 
-> Use `git checkout <branch>` to pick the adaptation target, then follow the branch-specific README and artifacts for Cursor or OpenCode execution.
+> Use `git checkout <branch>` to pick the adaptation target, then follow the branch-specific README and artifacts for Cursor, OpenCode, or other runtime-specific execution.
 
 ## Install helper
 
