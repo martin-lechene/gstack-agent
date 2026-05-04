@@ -1,0 +1,10 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Editor and OS artifacts
+.DS_Store
+Thumbs.db
+
+# GitAgent build / runtime files
+*.log

@@ -1,48 +1,109 @@
 # gstack-agent
 
-Six opinionated workflow skills that turn your AI coding assistant into a team of specialists — CEO/founder for product thinking, eng manager for architecture, staff engineer for review, release engineer for shipping, QA engineer for browser testing, and engineering manager for retrospectives. Based on [Garry Tan's gstack](https://github.com/garrytan/gstack).
+Product-ready GitAgent adapter repository for multi-target AI workflows.
 
-## Run
+- CLI-first install/config UX
+- Branch-aware adaptation for Claude, Cursor, and OpenCode
+- Regression validation for all target branches
+- Versioning system with tags and release guidance
+- GitHub issue and PR templates for a real product workflow
 
-```bash
-npx @open-gitagent/gitagent run -r https://github.com/shreyas-lyzr/gstack-agent
-```
+**Current version:** 1.0.0
 
-## What It Can Do
+## What this repository delivers
 
-- **/plan-ceo-review** — Founder/CEO mode: rethink the problem, find the 10-star product, challenge premises
-- **/plan-eng-review** — Eng manager mode: lock in architecture, data flow, diagrams, edge cases, tests
-- **/review** — Paranoid staff engineer mode: find bugs that pass CI but break in production
-- **/ship** — Release engineer mode: sync main, run tests, bump version, push, open PR — fully automated
-- **/browse** — QA engineer mode: headless Chromium browser for visual QA, form filling, screenshots
-- **/retro** — Engineering manager mode: weekly retrospective with commit analysis, velocity metrics, trends
+gstack-agent is designed to be used as a production-ready AI agent repository. It is structured around:
 
-## Structure
+- opinionated workflow skills for planning, review, shipping, QA, and retrospectives
+- stable branch targets for specific runtime environments
+- lightweight cross-platform initialization and install helpers
+- robust validation tooling to prevent regressions
 
-```
-gstack-agent/
-├── agent.yaml
-├── SOUL.md
-├── RULES.md
-├── README.md
-├── skills/
-│   ├── plan-ceo-review/
-│   │   └── SKILL.md
-│   ├── plan-eng-review/
-│   │   └── SKILL.md
-│   ├── review/
-│   │   ├── SKILL.md
-│   │   └── checklist.md
-│   ├── ship/
-│   │   └── SKILL.md
-│   ├── browse/
-│   │   └── SKILL.md
-│   └── retro/
-│       └── SKILL.md
-└── knowledge/
-    ├── index.yaml
-    └── workflow-guide.md
-```
+## Quick start
+
+Clone and enter the repository:
+
+
+
+Then initialize the repository for your environment:
+
+Linux/macOS:
+
+
+
+Windows:
+
+
+
+Use --help for a quick overview:
+
+
+
+## Branch adaptation matrix
+
+| Branch | Target | Core artifacts | Use case |
+|---|---|---|---|
+| main | Product-ready source | README.md, VERSION, CHANGELOG.md, .github/, scripts/validate_branches.py | Canonical development and release branch |
+| claude | Claude Code | agent.yaml, SOUL.md, RULES.md, skills/ | Default GitAgent/Claude runtime |
+| cursor | Cursor IDE | .cursor/rules/*.mdc, skills/ | Cursor rule export adapted from the same agent source |
+| opencode | OpenCode | AGENTS.md, opencode.json | OpenCode runtime configuration and instructions |
+| codex | OpenAI Codex | CODEX.md, codex.json | OpenAI Codex runtime adapter |
+| antigravity | Antigravity | ANTIGRAVITY.md, antigravity.json | Antigravity runtime adapter |
+| vscode | VS Code AI | .vscode/agent.json, VSCODE.md | VS Code AI runtime adapter |
+| copilot | GitHub Copilot | copilot.json, COPILOT.md | GitHub Copilot runtime adapter |
+| phpstorm | PhpStorm Junie | .phpstorm/junie.json, PHPSTORM.md | PhpStorm Junie runtime adapter |
+
+> Use git checkout <branch> to select the runtime target and validate the branch with python scripts/validate_branches.py.
+
+## Install helper UX
+
+The install helpers are intentionally ergonomic:
+
+- detect existing adapter files
+- recommend the best target automatically
+- prompt before creating anything
+- never overwrite existing configuration
+- support both interactive and CLI-driven invocation
+
+Supported commands:
+
+
+
+## Validation and regression testing
+
+This repository includes a branch-aware validation workflow:
+
+- scripts/validate_branches.py checks every adaptation branch for the expected runtime artifacts
+- GitHub Actions runs on push and pull request events
+- VERSION and CHANGELOG.md are used for version discipline
+
+Run validation locally:
+
+
+
+## Versioning and release
+
+This project uses semantic versioning via the VERSION file.
+
+To release a new version:
+
+
+
+Keep CHANGELOG.md updated with release notes.
+
+## Contribution workflow
+
+Use the provided GitHub templates:
+
+- .github/ISSUE_TEMPLATE/bug_report.md
+- .github/ISSUE_TEMPLATE/feature_request.md
+- .github/PULL_REQUEST_TEMPLATE.md
+
+See CONTRIBUTING.md for development and issue workflows.
+
+## Repository structure
+
+
 
 ## Branch adaptation matrix
 
