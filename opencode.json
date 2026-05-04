@@ -1,0 +1,14 @@
+{
+  "model": "anthropic/claude-opus-4-6",
+  "provider": {
+    "anthropic": {
+      "npm": "@ai-sdk/anthropic"
+    }
+  },
+  "name": "gstack-agent",
+  "description": "Six opinionated workflow skills that turn your AI coding assistant into a team of specialists.",
+  "runtime": {
+    "max_turns": 50,
+    "timeout": 300
+  }
+}
