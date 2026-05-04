@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parent.parent
-BRANCHES = ["main", "claude", "cursor", "opencode"]
+BRANCHES = ["main", "claude", "cursor", "opencode", "codex", "antigravity", "vscode", "copilot", "phpstorm"]
 
 
 def run(cmd, **kwargs):
@@ -72,6 +72,31 @@ def validate_branch(branch):
             issues.append("Missing AGENTS.md")
         if not file_exists("opencode.json"):
             issues.append("Missing opencode.json")
+    if branch == "codex":
+        if not file_exists("CODEX.md"):
+            issues.append("Missing CODEX.md")
+        if not file_exists("codex.json"):
+            issues.append("Missing codex.json")
+    if branch == "antigravity":
+        if not file_exists("ANTIGRAVITY.md"):
+            issues.append("Missing ANTIGRAVITY.md")
+        if not file_exists("antigravity.json"):
+            issues.append("Missing antigravity.json")
+    if branch == "vscode":
+        if not file_exists("VSCODE.md"):
+            issues.append("Missing VSCODE.md")
+        if not file_exists(".vscode/agent.json"):
+            issues.append("Missing .vscode/agent.json")
+    if branch == "copilot":
+        if not file_exists("COPILOT.md"):
+            issues.append("Missing COPILOT.md")
+        if not file_exists("copilot.json"):
+            issues.append("Missing copilot.json")
+    if branch == "phpstorm":
+        if not file_exists("PHPSTORM.md"):
+            issues.append("Missing PHPSTORM.md")
+        if not file_exists(".phpstorm/junie.json"):
+            issues.append("Missing .phpstorm/junie.json")
     if branch == "main":
         if not file_exists("install.sh") or not file_exists("install.bat"):
             issues.append("Install helpers missing for main branch")

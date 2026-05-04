@@ -2,7 +2,7 @@ name: Validate repository
 
 on:
   push:
-    branches: [main, claude, cursor, opencode]
+    branches: [main, claude, cursor, opencode, codex, antigravity, vscode, copilot, phpstorm]
   pull_request:
     branches: [main]
 
