@@ -54,6 +54,27 @@ gstack-agent/
 
 > Use `git checkout <branch>` to pick the adaptation target, then follow the branch-specific README and artifacts for Cursor or OpenCode execution.
 
+## Install helper
+
+This repository includes simple install helpers in `main`:
+
+- `./install.sh` for Linux/macOS
+- `install.bat` for Windows
+
+These scripts detect existing setup files and recommend the best target. They only create missing support files and do not overwrite existing user configuration.
+
+Example usage:
+
+```bash
+bash install.sh
+```
+
+On Windows:
+
+```bat
+install.bat
+```
+
 ## Built with
 
 [gitagent](https://github.com/open-gitagent/gitagent) — a git-native, framework-agnostic open standard for AI agents.
