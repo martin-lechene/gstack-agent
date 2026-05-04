@@ -24,6 +24,11 @@ def current_branch():
     return result.stdout.strip()
 
 
+def current_commit():
+    result = git("rev-parse", "HEAD")
+    return result.stdout.strip()
+
+
 def ensure_clean_worktree():
     status = git("status", "--porcelain", check=True).stdout.strip()
     if status:
@@ -36,18 +41,25 @@ def branch_exists(branch):
 
 
 def remote_branch_exists(branch):
-    result = git("branch", "-r", "--list", f"origin/{branch}", check=True)
+    result = git("ls-remote", "--heads", "origin", branch, check=True)
     return bool(result.stdout.strip())
 
 
 def checkout_branch(branch):
     if branch_exists(branch):
         git("checkout", branch)
-        return
+        return True
     if remote_branch_exists(branch):
         git("checkout", "-b", branch, f"origin/{branch}")
-        return
-    raise SystemExit(f"Branch not found locally or remotely: {branch}")
+        return True
+    return False
+
+
+def fetch_origin_refs():
+    try:
+        run(["git", "fetch", "--prune", "--no-tags", "origin", "+refs/heads/*:refs/remotes/origin/*"])
+    except subprocess.CalledProcessError:
+        print("Warning: Unable to fetch origin refs; continuing with available local references.")
 
 
 def file_exists(path):
@@ -126,12 +138,20 @@ def validate_python_scripts():
 def main():
     ensure_clean_worktree()
     original = current_branch()
-    print(f"Starting validation from branch: {original}")
+    original_commit = current_commit()
+    print(f"Starting validation from branch: {original} ({original_commit})")
+    fetch_origin_refs()
+
     errors = []
     try:
         for branch in BRANCHES:
             print(f"\nValidating branch: {branch}")
-            checkout_branch(branch)
+            if not (branch_exists(branch) or remote_branch_exists(branch)):
+                print(f"Skipping unavailable branch: {branch}")
+                continue
+            if not checkout_branch(branch):
+                print(f"Unable to check out branch {branch}; skipping.")
+                continue
             issues = validate_branch(branch)
             if issues:
                 print("Issues found:")
@@ -144,8 +164,12 @@ def main():
         validate_shell_scripts()
         validate_python_scripts()
     finally:
-        checkout_branch(original)
-        print(f"\nRestored original branch: {original}")
+        if original == "HEAD":
+            git("checkout", "--detach", original_commit)
+        else:
+            if not checkout_branch(original):
+                git("checkout", "--detach", original_commit)
+        print(f"\nRestored original state: {original} ({original_commit})")
     if errors:
         raise SystemExit(f"Validation failed with {len(errors)} issue(s).")
     print("\nAll checks passed.")

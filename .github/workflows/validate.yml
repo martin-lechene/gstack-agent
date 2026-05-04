@@ -1,10 +1,16 @@
-name: Validate repository
+name: CI
 
 on:
   push:
-    branches: [main, claude, cursor, opencode, codex, antigravity, vscode, copilot, phpstorm]
+    branches:
+      - '**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
+  workflow_dispatch: {}
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   validate:
@@ -20,5 +26,13 @@ jobs:
           python-version: '3.x'
       - name: Install dependencies
         run: python -m pip install --upgrade pip
+      - name: Fetch all remote branches
+        run: git fetch --prune --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
       - name: Validate branches and artifacts
         run: python scripts/validate_branches.py
+      - name: Validate Python syntax
+        run: python -m py_compile scripts/validate_branches.py
+      - name: Validate shell scripts
+        run: bash -n install.sh
+      - name: Validate compiled Python files
+        run: python -m compileall .
